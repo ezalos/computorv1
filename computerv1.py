@@ -211,6 +211,9 @@ class ComputorV1():
 		print()
 
 if __name__ == "__main__":
+	if len(sys.argv) != 2:
+		print("usage: " + "python3 " + sys.argv[0] + " " +\
+		"\"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\"")
 	eq = ["5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
 		"8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0",
 		"1 * X^0 + 1 * X^1 + 1 * X^2 = 0 * X^0",
