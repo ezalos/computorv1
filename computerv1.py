@@ -85,7 +85,6 @@ class polynomial():
 		delta = b ** 2 - 4 * a * c
 		print('Delta = ', delta)
 		if delta < 0:
-			print("Complex Sol!")
 			print("Discriminant is strictly negative, the two complex solutions are:")
 			sol_i = ((-delta) ** 0.5) / (2 * a)
 			sol_ = (-b) / (2 * a)
@@ -172,6 +171,9 @@ if __name__ == "__main__":
 		"1 * X^0 + 2 * X^1 + 1 * X^2 = 0 * X^0",
 		"1 * X^0 = 0 * X^0",
 		"0 * X^0 = 0 * X^0",
+		"0 * X^1 = 0 * X^0",
+		"0 * X^2 = 0 * X^0",
+		"0 * X^3 = 0 * X^2",
 		"5 * X^0 + 4 * X^1 = 4 * X^0"]
 	# eq = "1 * X^0 = 0"
 	for i in eq:
