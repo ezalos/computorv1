@@ -34,7 +34,14 @@ class polynomial_term():
 		if int(self.a) == float(self.a):
 			term += "{:d}".format(int(self.a))
 		else:
-			term += "{1:{0}f}".format(self.a_len, self.a)
+			temp = "{1:{0}f}".format(self.a_len, self.a)
+			ind = len(temp)
+			if '.' in temp:
+				for i in range(-1, -len(temp) -1, -1):
+					if temp[i] != '0':
+						break
+					ind = i
+			term += temp[:ind]
 		term += " * X^{:d}".format(self.n)
 		term = term.replace("+ -", "-")
 		return term
@@ -79,8 +86,11 @@ class polynomial():
 		print('Delta = ', delta)
 		if delta < 0:
 			print("Complex Sol!")
-			#Complex solution
-			pass
+			print("Discriminant is strictly negative, the two complex solutions are:")
+			sol_i = ((-delta) ** 0.5) / (2 * a)
+			sol_ = (-b) / (2 * a)
+			print("\t", sol_, "+", sol_i, "i")
+			print("\t", sol_, "-", sol_i, "i")
 		elif delta > 0:
 			print("Discriminant is strictly positive, the two solutions are:")
 			sol_1 = (-b + delta ** 0.5) / (2 * a)
@@ -88,10 +98,9 @@ class polynomial():
 			sol_2 = (-b - delta ** 0.5) / (2 * a)
 			print("\t", sol_2)
 		else:
-			print("Double root!")
-
-
-
+			print("Discriminant is equal to zero, the solution is:")
+			sol = -b / (2 * a)
+			print("\t", sol)
 
 	def __str__(self):
 		red = ""
@@ -124,6 +133,9 @@ def fill_pol_class(eq_dic, pol_dic, right=False):
 
 def cut_around_equal(str):
 	eq_dic = {}
+	# eq_dic[0] = polynomial_term(0, 0, 0)
+	# eq_dic[1] = polynomial_term(0, 0, 0)
+	# eq_dic[2] = polynomial_term(0, 0, 0)
 	if '=' in str:
 		str = str.split('=')
 		regex = re.compile(polynomial_elem_pattern)
@@ -156,6 +168,10 @@ if __name__ == "__main__":
 
 	eq = ["5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0",
 		"8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0",
+		"1 * X^0 + 1 * X^1 + 1 * X^2 = 0 * X^0",
+		"1 * X^0 + 2 * X^1 + 1 * X^2 = 0 * X^0",
+		"1 * X^0 = 0 * X^0",
+		"0 * X^0 = 0 * X^0",
 		"5 * X^0 + 4 * X^1 = 4 * X^0"]
 	# eq = "1 * X^0 = 0"
 	for i in eq:
