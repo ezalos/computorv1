@@ -1,6 +1,15 @@
 import sys
 import re
 
+PURPLE = '\033[95m'
+BLUE = '\033[94m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+RED = '\033[91m'
+RESET = '\033[0m'
+BOLD = '\033[1m'
+UNDERLINE = '\033[4m'
+
 polynomial_elem_pattern = r"(?#\
 )(?P<Polynomial_Elem>(?#\
 	)(?P<sign>[+\-])?(?#\
@@ -15,6 +24,18 @@ polynomial_elem_pattern = r"(?#\
 	))?(?#\
 ))(?#\
 )"
+
+def get_col(degree):
+	term = ""
+	if degree == 0:
+		term += GREEN
+	elif degree == 1:
+		term += BLUE
+	elif degree == 2:
+		term += PURPLE
+	else:
+		term += RED
+	return term
 
 class polynomial_term():
 	def __init__(self, a, n, a_len):
@@ -31,6 +52,7 @@ class polynomial_term():
 		return None
 	def __str__(self):
 		term = ""
+		term += get_col(self.n)
 		if int(self.a) == float(self.a):
 			term += "{:d}".format(int(self.a))
 		else:
@@ -43,35 +65,51 @@ class polynomial_term():
 					ind = i
 			term += temp[:ind]
 		term += " * X^{:d}".format(self.n)
-		term = term.replace("+ -", "-")
+		term += RESET
 		return term
 
 class polynomial():
 	def __init__(self, equation):
-		self.eq = equation
+		cleaned = [e for e in equation if e.a != 0]
+		if len(cleaned) == 0:
+			cleaned.append(polynomial_term(0, 0, 0))
+		self.eq = cleaned
 		self.deg = equation[-1].n
 
 	def solve(self):
-		print("Polynomial degree: {}".format(self.deg))
+		print("Polynomial degree: " + get_col(self.deg) + "{}".format(self.deg) + RESET)
 		eq = self.eq
 		if eq[-1].n > 2:
 			print("The polynomial degree is stricly greater than 2, I can't solve.")
 		elif eq[-1].n == 0:
-			print("X^0 is always equal to 1:")
-			if eq[-1].a == 0:
-				print("\tAny X is a solution")
-			else:
-				print("\tThere is no X which can be a solution")
+			self.solve_degree_0()
 		elif eq[-1].n == 1:
-			a = eq[-1].a
-			if len(eq) > 1:
-				b = eq[0].a
-			else:
-				b = 0
-			print("The solution is:")
-			print("\t{:f}".format(-b/a))
+			self.solve_degree_1()
 		elif eq[-1].n == 2:
 			self.solve_degree_2()
+
+	def solve_degree_0(self):
+		print("X^0 is always equal to 1:")
+		print(YELLOW, end="")
+		if self.eq[-1].a == 0:
+			print("\tAny X is a solution")
+		else:
+			print("\tThere is no X which can be a solution")
+		print(RESET, end="")
+
+	def solve_degree_1(self):
+		a = self.eq[-1].a
+		if a == 0:
+			self.solve_degree_0()
+			return
+		if len(self.eq) > 1:
+			b = self.eq[0].a
+		else:
+			b = 0
+		print("The solution is:")
+		print(YELLOW, end="")
+		print("\t{:f}".format(-b/a))
+		print(RESET, end="")
 
 	def solve_degree_2(self):
 		a , b, c = (0, 0, 0)
@@ -82,24 +120,32 @@ class polynomial():
 				b = v.a
 			elif v.n == 2:
 				a = v.a
+		if a == 0:
+			self.solve_degree_1()
 		delta = b ** 2 - 4 * a * c
 		print('Delta = ', delta)
 		if delta < 0:
 			print("Discriminant is strictly negative, the two complex solutions are:")
 			sol_i = ((-delta) ** 0.5) / (2 * a)
 			sol_ = (-b) / (2 * a)
+			print(YELLOW, end="")
 			print("\t", sol_, "+", sol_i, "i")
 			print("\t", sol_, "-", sol_i, "i")
+			print(RESET, end="")
 		elif delta > 0:
 			print("Discriminant is strictly positive, the two solutions are:")
 			sol_1 = (-b + delta ** 0.5) / (2 * a)
+			print(YELLOW, end="")
 			print("\t", sol_1)
 			sol_2 = (-b - delta ** 0.5) / (2 * a)
 			print("\t", sol_2)
+			print(RESET, end="")
 		else:
 			print("Discriminant is equal to zero, the solution is:")
 			sol = -b / (2 * a)
+			print(YELLOW, end="")
 			print("\t", sol)
+			print(RESET, end="")
 
 	def __str__(self):
 		red = ""
@@ -108,6 +154,7 @@ class polynomial():
 				red += "+ "
 			red += val.__str__() + ' '
 		red += '= 0'
+		red = red.replace("+ -", "-")
 		return red
 
 def fill_pol_class(eq_dic, pol_dic, right=False):
@@ -172,6 +219,8 @@ if __name__ == "__main__":
 		"1 * X^0 = 0 * X^0",
 		"0 * X^0 = 0 * X^0",
 		"0 * X^1 = 0 * X^0",
+		"0 * X^1 = 0",
+		"1 * X^1 = 10",
 		"0 * X^2 = 0 * X^0",
 		"0 * X^3 = 0 * X^2",
 		"5 * X^0 + 4 * X^1 = 4 * X^0"]
