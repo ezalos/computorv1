@@ -111,6 +111,29 @@ class polynomial():
 		print("\t{:f}".format(-b/a))
 		print(RESET, end="")
 
+	def plot_3d(self, a , b, c):
+		from mpl_toolkits import mplot3d
+		import numpy as np
+		import matplotlib.pyplot as plt
+
+		# def quad(x, y, a, b, c)
+		# 	obj = np
+
+		def f(x, y):
+		   return np.sin(np.sqrt(x ** 2 + y ** 2))
+
+		x = np.linspace(-6, 6, 30)
+		y = np.linspace(-6, 6, 30)
+
+		X, Y = np.meshgrid(x, y)
+		Z = f(X, Y)
+
+		fig = plt.figure()
+		ax = plt.axes(projection='3d')
+		ax.plot_wireframe(X, Y, Z, color='black')
+		ax.set_title('wireframe')
+		plt.show()
+
 	def solve_degree_2(self):
 		a , b, c = (0, 0, 0)
 		for v in self.eq:
@@ -123,6 +146,7 @@ class polynomial():
 		if a == 0:
 			self.solve_degree_1()
 		delta = b ** 2 - 4 * a * c
+		# self.plot_3d(a, b ,c)
 		print('Delta = ', delta)
 		if delta < 0:
 			print("Discriminant is strictly negative, the two complex solutions are:")
