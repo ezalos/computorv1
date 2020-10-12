@@ -13,7 +13,7 @@ def plot_3d(a , b, c):
 		return obj
 
 	root = np.roots([a, b, c])
-	print(root)
+	print("Root: ", root)
 	x = np.linspace(root.real.min() - 10, root.real.max() + 10, 25)
 	y = np.linspace(root.imag.min() - 10, root.imag.max() + 10, 25)
 
@@ -34,14 +34,16 @@ def plot_3d(a , b, c):
 		ax.plot_wireframe(X, Y, Z, color='cyan', alpha=0.5)
 		ax.set_xlabel('X Real part')
 		ax.set_ylabel('X Imag part')
-		ax.set_zlabel("f(X)")
+		ax.set_zlabel("f(X) (real part)")
 	else:
 		Z = quad(x)
 		ax = plt.axes()
 		ax.plot(x, Z)
 		yl = np.linspace(0, 0, 25)
 		ax.plot(x, yl, c='g')
-		ax.scatter(root, np.ndarray(root.shape), c='r', marker='o')
+		y_ = np.zeros(root.shape)
+		# print(y_)
+		ax.scatter(root, y_, c='r', marker='o')
 		ax.set_xlabel('X')
 		ax.set_ylabel("f(X)")
 
@@ -49,6 +51,6 @@ def plot_3d(a , b, c):
 	plt.show()
 
 if __name__ == "__main__":
-	# plot_3d(-9.3, 4, 4)#double
-	# plot_3d(1, 2, 1)#lonely
+	plot_3d(-9.3, 4, 4)#double
+	plot_3d(1, 2, 1)#lonely
 	plot_3d(1, 1, 1)#complex
