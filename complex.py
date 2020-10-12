@@ -5,47 +5,50 @@ def plot_3d(a , b, c):
 
 	def quad_imag(x, y):
 		obj = a * (x + (y * 1j)) ** 2 + b * (x + (y * 1j)) + c
-		return obj
+		# print(obj)
+		return obj.real
 
 	def quad(x):
 		obj = a * (x) ** 2 + b * (x) + c
 		return obj
-		
+
 	root = np.roots([a, b, c])
 	print(root)
 	x = np.linspace(root.real.min() - 10, root.real.max() + 10, 25)
 	y = np.linspace(root.imag.min() - 10, root.imag.max() + 10, 25)
 
 	X, Y = np.meshgrid(x, y)
-	if root.imag.any():
-		Z = quad_imag(X, Y)
-	else:
-		Z = quad(x)
 
 	fig = plt.figure()
 	if root.imag.any():
+		Z = quad_imag(X, Y)
 		ax = plt.axes(projection='3d')
-	else:
-		ax = plt.axes()
-	if root.imag.any():
-		ax.plot_wireframe(X, Y, Z, color='blue')
-	else:
-		ax.plot(x, Z)
-	if root.imag.any():
-		ax.scatter(root.real, root.imag, np.ndarray(root.shape), c='r', marker='o')
-	else:
-		ax.scatter(root, np.ndarray(root.shape), c='r', marker='o')
-
-	if root.imag.any():
+		xl = root.real
+		xl = np.linspace(xl[0], xl[1], 25)
+		yl = root.imag
+		yl = np.linspace(yl[0] - 10, yl[1] + 10, 25)
+		zl = xl
+		ax.plot(xl, yl, zl, c='g')
+		ax.plot(x, np.linspace(0, 0, 25), quad_imag(x, np.linspace(0, 0, 25)), c='k')
+		ax.scatter(root.real, root.imag, quad_imag(root.real, root.imag), c='r', marker='o')
+		ax.plot_wireframe(X, Y, Z, color='cyan', alpha=0.5)
 		ax.set_xlabel('X Real part')
 		ax.set_ylabel('X Imag part')
 		ax.set_zlabel("f(X)")
 	else:
+		Z = quad(x)
+		ax = plt.axes()
+		ax.plot(x, Z)
+		yl = np.linspace(0, 0, 25)
+		ax.plot(x, yl, c='g')
+		ax.scatter(root, np.ndarray(root.shape), c='r', marker='o')
 		ax.set_xlabel('X')
 		ax.set_ylabel("f(X)")
+
 	ax.set_title(str(a)+"x² + " + str(b)+"x + "+ str(c))
 	plt.show()
 
-plot_3d(-9.3, 4, 4)#double
-plot_3d(1, 2, 1)#lonely
-plot_3d(1, 1, 1)#complex
+if __name__ == "__main__":
+	# plot_3d(-9.3, 4, 4)#double
+	# plot_3d(1, 2, 1)#lonely
+	plot_3d(1, 1, 1)#complex
