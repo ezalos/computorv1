@@ -13,7 +13,7 @@ class PolGraph():
 			self.name = name
 		else:
 			self.name = str(a)+"x² + " + str(b)+"x + "+ str(c)
-		print("Root: ", self.root)
+		# print("Root: ", self.root)
 
 	def plot(self):
 		if len(self.root) == 0:
