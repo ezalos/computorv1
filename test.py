@@ -1,5 +1,7 @@
 import sys
 from computorv1 import ComputorV1
+from graph import PolGraph
+from colors import *
 
 deg_0 = [
 	"5 * X^0 = 5 * X^0",
@@ -48,14 +50,50 @@ bad = ["shit",
 	"e * X^a = 0",
 ]
 
-def debug(exemples):
+def test_sol(pol):
+	a, b, c, = pol.coefs()
+	mine = pol.sol
+	them = PolGraph(a, b, c).root.tolist()
+	err = False
+	if mine == None or them == None:
+		if mine != None or them != None:
+			err = True
+	else:
+		if len(mine) != len(them):
+			err = True
+		precision = 5
+		for me, np in zip(mine, them):
+			if np.imag != None:
+				if round(me.real, precision) != round(np.real, precision):
+					err = True
+					print("me: ", me.real)
+					print("np: ", np.real)
+				if round(me.imag, precision) != round(np.imag, precision):
+					err = True
+					print("me: ", me.imag)
+					print("np: ", np.imag)
+
+			elif round(me, precision) != round(np, precision):
+				err = True
+				print("me: ", me)
+				print("np: ", np)
+	if err:
+		print("mine: ", mine)
+		print("them: ", them)
+		print(RED   + "FAILURE" + RESET)
+	else:
+		print(GREEN + "SUCCESS" + RESET)
+
+def debug(exemples, cmp=False):
 	for ex in exemples:
 		print("python3 ", sys.argv[0] + " \"" + ex + "\"")
-		ComputorV1(ex, debug=True)
+		pol = ComputorV1(ex).pol
+		if pol and cmp:
+			test_sol(pol)
 		print()
 
 if __name__ == "__main__":
 	eqs = [deg_0, deg_1, deg_2_neg, deg_2_nul, deg_2_pos, deg_3]
 	for eq in eqs:
-		debug(eq)
+		debug(eq, cmp=True)
 	debug(bad)
