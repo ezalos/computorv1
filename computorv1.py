@@ -7,14 +7,33 @@ def usage():
 	usage_message = ""
 	usage_message += "usage: " + "python3 " + sys.argv[0] + " "
 	usage_message += " [-v or --visual] "
+	usage_message += " [-h or --help] "
 	usage_message += "\"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\""
 	print(usage_message)
-	sys.exit()
+
+def arg_pase(av):
+	help = False
+	visual = False
+	equation = None
+	for arg in av:
+		if arg == "-v" or arg == "--visual":
+			visual = True
+		elif arg == "-h" or arg == "--help":
+			help = True
+		else:
+			equation = arg
+	if help:
+		usage()
+		sys.exit()
+	elif equation == None:
+		equation = input("Please input your equation: ")
+	return equation, visual
+
 
 
 class ComputorV1():
-	def __init__(self, equation="", visual=False):
-		equation = parse_equation(equation)
+	def __init__(self, equation_str="", visual=False):
+		equation = parse_equation(equation_str)
 		if equation:
 			pol = Polynomial(equation)
 			print("Reduced form: ", pol)
@@ -22,18 +41,10 @@ class ComputorV1():
 			if visual:
 				a, b, c, = pol.coefs()
 				PolGraph(a, b, c).plot()
+		else:
+			print("Invalid equation: ", equation_str)
+			usage()
 
 if __name__ == "__main__":
-	if 3 < len(sys.argv) < 2:
-		usage()
-	visual = False
-	if len(sys.argv) == 3:
-		if sys.argv[1] == "-v" or sys.argv[1] == "--visual":
-			visual = True
-			equation = sys.argv[2]
-		else:
-			usage()
-	else:
-		equation = sys.argv[1]
-
+	equation, visual = arg_pase(sys.argv[1:])
 	ComputorV1(equation, visual)
