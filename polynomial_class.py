@@ -1,11 +1,4 @@
-PURPLE = '\033[95m'
-BLUE = '\033[94m'
-GREEN = '\033[92m'
-YELLOW = '\033[93m'
-RED = '\033[91m'
-RESET = '\033[0m'
-BOLD = '\033[1m'
-UNDERLINE = '\033[4m'
+from colors import *
 
 def get_color(degree):
 	term = ""
@@ -58,6 +51,7 @@ class Polynomial():
 			cleaned.append(PolynomialTerm(0, 0, 0))
 		self.eq = cleaned
 		self.deg = cleaned[-1].n
+		self.sol = []
 
 	def coefs(self):
 		a , b, c = (0, 0, 0)
@@ -104,6 +98,7 @@ class Polynomial():
 		print(YELLOW, end="")
 		print("\t{:f}".format(-b/a))
 		print(RESET, end="")
+		self.sol.append(-b/a)
 
 	def solve_degree_2(self):
 		a , b, c = self.coefs()
@@ -117,19 +112,26 @@ class Polynomial():
 			sol_ = (-b) / (2 * a)
 			print(YELLOW, end="")
 			print("\t", sol_, "+", sol_i, "i")
+			self.sol.append(sol_ + (1j * sol_i))
 			print("\t", sol_, "-", sol_i, "i")
+			self.sol.append(sol_ - (1j * sol_i))
+			self.sol.append(-b/a)
 			print(RESET, end="")
 		elif delta > 0:
 			print("Discriminant is strictly positive, the two solutions are:")
 			sol_1 = (-b + delta ** 0.5) / (2 * a)
 			print(YELLOW, end="")
 			print("\t", sol_1)
+			self.sol.append(sol_1)
 			sol_2 = (-b - delta ** 0.5) / (2 * a)
 			print("\t", sol_2)
+			self.sol.append(sol_2)
 			print(RESET, end="")
 		else:
 			print("Discriminant is equal to zero, the solution is:")
 			sol = -b / (2 * a)
+			self.sol.append(sol)
+			self.sol.append(sol)
 			print(YELLOW, end="")
 			print("\t", sol)
 			print(RESET, end="")

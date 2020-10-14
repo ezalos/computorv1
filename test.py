@@ -20,7 +20,6 @@ deg_1 = [
 	"5 * X^0 + 4 * X^1 = 4 * X^0"
 ]
 
-
 deg_2_neg = [
 	"5 * X^0 + 3 * X^1 + 3 * X^2 = 1 * X^0 + 0 * X^1",
 	"1 * X^0 + 1 * X^1 + 1 * X^2 = 0 * X^0",
@@ -52,7 +51,7 @@ bad = ["shit",
 def debug(exemples):
 	for ex in exemples:
 		print("python3 ", sys.argv[0] + " \"" + ex + "\"")
-		ComputorV1(ex)
+		ComputorV1(ex, debug=True)
 		print()
 
 if __name__ == "__main__":
