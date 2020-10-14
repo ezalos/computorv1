@@ -20,7 +20,8 @@ This project solve quadratic equations, and can display visual interpretation
 
 ## Tests
 
-```test.py``` file contains different examples of equations, which are used to test ```computorv1.py```
+```python3 test.py```
+The file contains different examples of equations, which are used to test ```computorv1.py```
 
 ## Acknowledgments
 
